@@ -1,14 +1,12 @@
 
 import com.google.gson.Gson;
+import domain.Item;
 import domain.Order;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RestaurantOrders {
@@ -97,4 +95,38 @@ public class RestaurantOrders {
                 .toList();
     }
 
+
+    public Map<String, List<Order>> ordersByCustomer() {
+        return orders.stream()
+                .collect(Collectors.groupingBy(
+                        o -> o.getCustomer().getFullName()
+                ));
+    }
+
+    public Map<String, Double> totalByCustomer() {
+        return orders.stream()
+                .collect(Collectors.groupingBy(
+                        o -> o.getCustomer().getFullName(),
+                        Collectors.summingDouble(Order::getTotal)
+                ));
+    }
+
+    public Optional<Map.Entry<String, Double>> bestCustomer() {
+        return totalByCustomer().entrySet().stream()
+                .max(Map.Entry.comparingByValue());
+    }
+
+    public Optional<Map.Entry<String, Double>> worstCustomer() {
+        return totalByCustomer().entrySet().stream()
+                .min(Map.Entry.comparingByValue());
+    }
+
+    public Map<String, Integer> soldItemsCount() {
+        return orders.stream()
+                .flatMap(o -> o.getItems().stream())
+                .collect(Collectors.groupingBy(
+                        Item::getName,
+                        Collectors.summingInt(Item::getAmount)
+                ));
+    }
 }

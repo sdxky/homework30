@@ -39,5 +39,30 @@ public class Main {
         orders.uniqueSortedEmails()
                 .forEach(System.out::println);
 
+
+        System.out.println("\n===== ЗАДАНИЕ 2 =====");
+
+        System.out.println("Количество уникальных клиентов:");
+        System.out.println(orders.ordersByCustomer().size());
+
+        System.out.println("\nСумма заказов по клиентам:");
+        orders.totalByCustomer()
+                .forEach((name, sum) ->
+                        System.out.println(name + " -> " + sum));
+
+        System.out.println("\nКлиент с максимальной суммой заказов:");
+        orders.bestCustomer()
+                .ifPresent(e ->
+                        System.out.println(e.getKey() + " -> " + e.getValue()));
+
+        System.out.println("\nКлиент с минимальной суммой заказов:");
+        orders.worstCustomer()
+                .ifPresent(e ->
+                        System.out.println(e.getKey() + " -> " + e.getValue()));
+
+        System.out.println("\nКоличество проданных товаров:");
+        orders.soldItemsCount()
+                .forEach((item, count) ->
+                        System.out.println(item + " -> " + count));
     }
 }
