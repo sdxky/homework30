@@ -5,7 +5,11 @@ import domain.Order;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class RestaurantOrders {
     // Этот блок кода менять нельзя! НАЧАЛО!
@@ -36,9 +40,61 @@ public class RestaurantOrders {
     //------   Реализация ваших методов должна быть ниже этой линии   ------
     //----------------------------------------------------------------------
 
-    // Наполните этот класс решением домашнего задания.
-    // Вам необходимо создать все необходимые методы
-    // для решения заданий из домашки :)
-    // вы можете добавлять все необходимые imports
-    //
+
+    public void printOrders() {
+        orders.forEach(System.out::println);
+    }
+
+    public List<Order> topMostExpensive(int n) {
+        return orders.stream()
+                .sorted(Comparator.comparingDouble(Order::getTotal).reversed())
+                .limit(n)
+                .toList();
+    }
+
+    public List<Order> topCheapest(int n) {
+        return orders.stream()
+                .sorted(Comparator.comparingDouble(Order::getTotal))
+                .limit(n)
+                .toList();
+    }
+
+    public List<Order> homeDeliveryOrders() {
+        return orders.stream()
+                .filter(Order::isHomeDelivery)
+                .toList();
+    }
+
+    public Optional<Order> mostProfitableHomeDelivery() {
+        return orders.stream()
+                .filter(Order::isHomeDelivery)
+                .max(Comparator.comparingDouble(Order::getTotal));
+    }
+
+    public Optional<Order> leastProfitableHomeDelivery() {
+        return orders.stream()
+                .filter(Order::isHomeDelivery)
+                .min(Comparator.comparingDouble(Order::getTotal));
+    }
+
+    public List<Order> ordersBetween(double min, double max) {
+        return orders.stream()
+                .filter(o -> o.getTotal() > min && o.getTotal() < max)
+                .toList();
+    }
+
+    public double totalRevenue() {
+        return orders.stream()
+                .mapToDouble(Order::getTotal)
+                .sum();
+    }
+
+    public List<String> uniqueSortedEmails() {
+        return orders.stream()
+                .map(o -> o.getCustomer().getEmail())
+                .collect(Collectors.toCollection(TreeSet::new))
+                .stream()
+                .toList();
+    }
+
 }

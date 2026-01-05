@@ -53,5 +53,8 @@ public class Order {
     //----------------------------------------------------------------------
 
     public void calculateTotal() {
+        total = items.stream()
+                .mapToDouble(item -> item.getPrice() * item.getAmount())
+                .sum();
     }
 }
