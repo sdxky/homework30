@@ -15,7 +15,6 @@ public class Main {
         orders.topMostExpensive(3)
                 .forEach(o -> System.out.println(o.getTotal()));
 
-        // 3. Топ-3 самых дешёвых заказов
         System.out.println("\nТоп 3 самых дешёвых заказов:");
         orders.topCheapest(3)
                 .forEach(o -> System.out.println(o.getTotal()));
